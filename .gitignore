@@ -105,3 +105,7 @@ dist
 
 # Bun lock file
 bun.lockb
+
+# Advent of Code Specific Files
+data/
+session.env

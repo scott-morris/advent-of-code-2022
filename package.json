@@ -3,6 +3,19 @@
   "version": "0.0.3",
   "module": "src/index.js",
   "devDependencies": {
-    "bun-types": "latest"
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/preset-typescript": "^7.18.6",
+    "babel-jest": "^29.0.3",
+    "bun-types": "latest",
+    "jest": "^29.0.3",
+    "ts-jest": "^29.0.1"
+  },
+  "dependencies": {
+    "console-table-printer": "^2.11.1",
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }

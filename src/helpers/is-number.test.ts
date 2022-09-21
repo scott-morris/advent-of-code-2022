@@ -1,65 +1,28 @@
 // Libraries
 
-import { describe, it, expect } from 'bun:test';
+// import { describe, it, expect } from '';
+import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
 
 // Dependencies
 
-import isNumber from './is-number';
+import isNumber from './is-number.ts';
 
 // Tests
 
-describe('isNumber.js', () => {
-    it('should be a function', () => {
-        expect(typeof isNumber).toBe('function');
-    })
-    
-    describe('when given a value', () => {
-        describe('that is an integer', () => {
-            it('it should return true', () => {
-                expect(isNumber(10)).toBe(true);
-            })
-        });
-    
-        describe('that is non-whole number', () => {
-            it('it should return true', () => {
-                expect(isNumber(3.14159)).toBe(true);
-                expect(isNumber(3.14000)).toBe(true);
-                expect(isNumber(3.1e8)).toBe(true);
-            })
-        });
+Deno.test('isNumber.js', async (t) => {
+    const numbers = [10, 3.14159, 3.14000, 3.1e8];
+    const validStrings = ['10', '3.14159', '3.14000'];
+    const invalidStrings = ['9134437236318171116117288148911191769789149391998581842118486728495315197918969961726641911197278519','foo']
 
-        describe('that is a string', () => {
-            describe('that is an integer', () => {
-                describe('that is too large to process', () => {
-                    it('it should return false', () => {
-                        expect(isNumber('9134437236318171116117288148911191769789149391998581842118486728495315197918969961726641911197278519')).toBe(false);
-                    });
-                });
-                describe('that is not too large to process', () => {
-                    it('it should return true', () => {
-                        expect(isNumber('10')).toBe(true);
-                    });
-                });
-            });
-            describe('that is an non-whole number', () => {
-                it('it should return true', () => {
-                    expect(isNumber('3.14159')).toBe(true);
-                    expect(isNumber('3.14000')).toBe(true);
-                });
-            });
-            describe('that is not a number', () => {
-                it('it should return false', () => {
-                    expect(isNumber('foo')).toBe(false);
-                });
-            });
-        });
-    
-        describe('that is not a number or string type', () => {
-            it('it should return false', () => {
-                expect(isNumber(undefined)).toBe(false);
-                expect(isNumber(null)).toBe(false);
-            })
-        });
-    })
+    await Promise.all(numbers.map((input) => t.step({ name: `when given a number (${input}), it should return true`, fn: () => {
+        assertEquals(isNumber(input), true);
+    }, sanitizeExit: false, sanitizeOps: false, sanitizeResources: false })));
+
+    await Promise.all(validStrings.map((input) => t.step({ name: `when given a valid number string ("${input}"), it should return true`, fn: () => {
+        assertEquals(isNumber(input), true);   
+    }, sanitizeExit: false, sanitizeOps: false, sanitizeResources: false })));
+
+    await Promise.all(invalidStrings.map((input) => t.step({ name: `when given an invalid number string ("${input}"), it should return true`, fn: () => {
+        assertEquals(isNumber(input), false);   
+    }, sanitizeExit: false, sanitizeOps: false, sanitizeResources: false })));
 });
-

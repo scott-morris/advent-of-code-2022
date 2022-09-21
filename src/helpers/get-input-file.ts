@@ -1,7 +1,7 @@
 // Libraries
 
-const chalk = require('chalk');
-const path = require('path');
+import chalk from 'chalk';
+import { path } from 'path';
 
 // Dependencies
 

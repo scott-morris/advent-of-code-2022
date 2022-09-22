@@ -1,6 +1,10 @@
 // Dependencies
 
-const memoize = require('./memoize');
+import memoize from './memoize.ts';
+
+// Types
+
+import { SimpleObject, Stringable } from './types.ts';
 
 // Private
 
@@ -11,19 +15,15 @@ const _factorial = memoize(factorial);
 
 /**
  * Get the sum of an array of numbers
- * @param {Array<Number>} arr array of numbers to sum
- * @returns {Number}
  */
-function sum(arr) {
+export function sum(arr: Array<number>): number {
   return arr.reduce((a, b) => a + b);
 }
 
 /**
  * Get the unique items in an array and how many times they appear
- * @param {Array<*>|Object} val array of primitive values
- * @returns {Map}
  */
-function countValues(val) {
+export function countValues(val: Array<Stringable> | SimpleObject): Map<Stringable, number> {
   return Array.isArray(val)
     ? val.reduce((res, item) => {
         res.set(item, (res?.get(item) ?? 0) + 1);
@@ -38,28 +38,25 @@ function countValues(val) {
 
 /**
  * Get the factorial of the given number
- * @param {Number} number the number to calculate
- * @returns {Number}
  */
-function factorial(number) {
+export function factorial(number: number): number {
   return number === 0 ? number : number + _factorial(number - 1);
 }
 
 /**
  * Get the mean (average) of an array of numbers
- * @param {Array<Number>} arr the array of numbers
- * @returns {Number}
  */
-function mean(arr) {
+export function mean(arr: Array<number>): number {
   return sum(arr) / arr.length;
 }
 
+// Alias
+export const average = mean;
+
 /**
  * Get the median of an array of numbers
- * @param {Array<Number>} arr the array of numbers
- * @returns {Number}
  */
-function median(arr) {
+export function median(arr: Array<number>): number {
   const numbers = [...arr];
   const len = numbers.length;
   numbers.sort((a, b) => a - b);
@@ -70,12 +67,14 @@ function median(arr) {
 
 /**
  * Get the mode of an array of numbers
- * @param {Array<Number>} arr the array of numbers
- * @returns {Array<Number>} the list of numbers that occur most often
  */
-function mode(arr) {
-  const modes = [];
-  const count = {};
+export function mode(arr: Array<number>): Array<number> {
+  interface CountObject {
+    [index: number]: number
+  }
+  
+  const modes: Array<number> = [];
+  const count: CountObject = {};
   let maxIndex = 0;
 
   arr.forEach((number) => {
@@ -83,7 +82,8 @@ function mode(arr) {
     maxIndex = Math.max(maxIndex, count[number]);
   });
 
-  Object.keys(count).forEach((key) => {
+  Object.keys(count).forEach((strKey) => {
+    const key = Number(strKey);
     if (count[key] === maxIndex) {
       modes.push(Number(key));
     }
@@ -94,27 +94,22 @@ function mode(arr) {
 
 /**
  * Round a given number to a specific number of places
- * @param {Number} number the number to round
- * @param {Number} [places = 0] the number of places to round the number
- * @returns {Number} the number rounded to the number of places
  */
-function round(number, places = 0) {
+export function round(number: number, places = 0): string {
   return places === 0
-    ? parseInt(number, 10)
-    : parseFloat(number.toFixed(places));
+    ? String(Math.round(number))
+    : number.toFixed(places);
 }
 
 /**
  * Get the Standard Deviation from an array of numbers
- * @param {Array<Number>} arr the array of numbers
- * @param {Boolean} usePopulation whether to use the population
- * @returns {Number}
  */
-const stdDev = (arr, usePopulation = false) => {
+export const stdDev = (arr: Array<number>, usePopulation = false): number => {
   const meanValue = mean(arr);
+
   return Math.sqrt(
     arr
-      .reduce((acc, val) => acc.concat((val - meanValue) ** 2), [])
+      .reduce((acc: Array<number>, val) => acc.concat((val - meanValue) ** 2), [])
       .reduce((acc, val) => acc + val, 0) /
       (arr.length - (usePopulation ? 0 : 1))
   );
@@ -125,8 +120,8 @@ const stdDev = (arr, usePopulation = false) => {
  * @param {Array<Array<Number>>} arr the 2-dimensional array (matrix) of numbers
  * @returns {Array<Array<Number>>} the transposed 2-dimensional array
  */
-function transpose(arr) {
-  const output = [];
+export function transpose(arr: Array<Array<number>>) {
+  const output: Array<Array<number>> = [];
 
   arr.forEach((row) =>
     row.forEach((item, idx) => {
@@ -137,16 +132,3 @@ function transpose(arr) {
 
   return output;
 }
-
-module.exports = {
-  average: mean,
-  countValues,
-  factorial,
-  mean,
-  median,
-  mode,
-  round,
-  stdDev,
-  sum,
-  transpose,
-};

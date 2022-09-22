@@ -1,6 +1,5 @@
 // Libraries
 
-// import { describe, it, expect } from '';
 import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
 
 // Dependencies
@@ -9,7 +8,7 @@ import isNumber from './is-number.ts';
 
 // Tests
 
-Deno.test('isNumber.js', async (t) => {
+Deno.test('isNumber.ts', async (t) => {
     const numbers = [10, 3.14159, 3.14000, 3.1e8];
     const validStrings = ['10', '3.14159', '3.14000'];
     const invalidStrings = ['9134437236318171116117288148911191769789149391998581842118486728495315197918969961726641911197278519','foo']

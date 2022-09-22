@@ -1,16 +1,17 @@
 // Libraries
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
+import { describe, beforeEach, it } from "https://deno.land/std@0.156.0/testing/bdd.ts";
 
 // Dependencies
 
-import { Counter } from './counter'
+import { Counter } from './counter.ts'
 
 // Test
 
 describe('Class: Counter', () => {
   describe('when given an existing Counter', () => {
-    let counter;
+    let counter: Counter;
 
     beforeEach(() => {
       counter = new Counter([
@@ -22,16 +23,16 @@ describe('Class: Counter', () => {
 
     it('increment() should increment just the given key', () => {
       counter.increment('b', 10);
-      expect(counter.get('a')).toBe(10);
-      expect(counter.get('b')).toBe(110);
-      expect(counter.get('c')).toBe(1000);
+      assertEquals(counter.get('a'), 10);
+      assertEquals(counter.get('b'), 110);
+      assertEquals(counter.get('c'), 1000);
     });
 
     it('decrement() should decrement just the given key', () => {
       counter.decrement('b', 10);
-      expect(counter.get('a')).toBe(10);
-      expect(counter.get('b')).toBe(90);
-      expect(counter.get('c')).toBe(1000);
+      assertEquals(counter.get('a'), 10);
+      assertEquals(counter.get('b'), 90);
+      assertEquals(counter.get('c'), 1000);
     });
   });
 });

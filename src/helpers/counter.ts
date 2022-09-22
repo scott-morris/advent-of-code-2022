@@ -1,15 +1,15 @@
 // Dependencies
 
-import { Key } from "./types";
+import { Key } from "./types.ts";
 
 // Private
 
 export interface CounterForEachCallback {
-  (value: Number, key: Key, map: Map<Key, number>): void;
+  (value: number, key: Key, map: Map<Key, number>): void;
 }
 
 export interface CounterObject {
-  [key: Key]: Number
+  [key: Key]: number
 }
 
 // Public
@@ -17,7 +17,7 @@ export interface CounterObject {
 export class Counter {
   map: Map<Key, number>;
 
-  constructor(iterable) {
+  constructor(iterable: Iterable<readonly [Key, number]> | null | undefined) {
     this.map =
       iterable instanceof Counter
         ? new Map(Array.from(iterable.map))
@@ -60,24 +60,22 @@ export class Counter {
     return this.map.values();
   }
 
-  increment(key: Key, byHowMuch: number = 1): number {
-    if (this.map.has(key)) {
-      const currentValue = this.map.get(key);
-      this.map.set(key, currentValue + byHowMuch);
-    } else {
-      this.map.set(key, byHowMuch);
-    }
-    return this.map.get(key);
+  increment(key: Key, byHowMuch = 1): number {
+    const currentValue = this.map.get(key);
+    const newValue = currentValue === undefined ? byHowMuch : currentValue + byHowMuch;
+
+    this.map.set(key, newValue);
+
+    return newValue;
   }
 
-  decrement(key: Key, byHowMuch: number = 1): number {
-    if (this.map.has(key)) {
-      const currentValue = this.map.get(key);
-      this.map.set(key, currentValue - byHowMuch);
-    } else {
-      this.map.set(key, 0 - byHowMuch);
-    }
-    return this.map.get(key);
+  decrement(key: Key, byHowMuch = 1): number {
+    const currentValue = this.map.get(key);
+    const newValue = currentValue === undefined ? 0 - byHowMuch : currentValue - byHowMuch;
+
+    this.map.set(key, newValue);
+
+    return newValue;
   }
 
   toObject(): CounterObject {

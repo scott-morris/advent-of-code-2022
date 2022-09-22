@@ -10,3 +10,5 @@ export interface Result {
 }
   
 export type PotentialResult = Result | undefined;
+
+export type Stringable = string | string[] | number | number[] | null

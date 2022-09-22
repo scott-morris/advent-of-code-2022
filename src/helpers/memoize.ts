@@ -1,3 +1,15 @@
+// Libraries
+
+import { Spy } from "https://deno.land/std@0.156.0/testing/mock.ts";
+
+// Type
+
+type Cacheable = string | string[] | number | number[] | null;
+
+interface CacheObject {
+  [key: string]: Cacheable;
+}
+
 // Public
 
 /**
@@ -6,15 +18,21 @@
  * times. This is ideal for recursive functions or functions that take time and are
  * called many times or require larger amounts of memory.
  */
-export default function memoize(fn: Function): Function {
-  const cache = {};
-  return (...args) => {
-    const key = JSON.stringify(args);
-    // eslint-disable-next-line no-prototype-builtins
-    if (cache.hasOwnProperty(key)) {
+// deno-lint-ignore ban-types
+export default function memoize(fn: Function | Spy): Function {
+  const cache: CacheObject = {};
+
+  return (...args: Cacheable[]) => {
+    const key: string = JSON.stringify(args);
+
+    if (cache?.[key] !== undefined) {
       return cache[key];
     }
+      
+    // Run the function
     const result = fn(...args);
+    
+    // Cache the results
     cache[key] = result;
 
     return result;

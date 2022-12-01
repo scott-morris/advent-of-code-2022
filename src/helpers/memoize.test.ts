@@ -1,8 +1,8 @@
 // Libraries
 
-import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
-import { describe, it, afterEach } from "https://deno.land/std@0.156.0/testing/bdd.ts";
-import { spy, restore, assertSpyCalls } from "https://deno.land/std@0.156.0/testing/mock.ts";
+import { assertEquals } from "https://deno.land/std@0.164.0/testing/asserts.ts";
+import { describe, it, afterEach } from "https://deno.land/std@0.164.0/testing/bdd.ts";
+import { spy, restore, assertSpyCalls } from "https://deno.land/std@0.164.0/testing/mock.ts";
 
 // Dependencies
 

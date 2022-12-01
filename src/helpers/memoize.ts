@@ -1,6 +1,6 @@
 // Libraries
 
-import { Spy } from "https://deno.land/std@0.156.0/testing/mock.ts";
+import { Spy } from "https://deno.land/std@0.164.0/testing/mock.ts";
 
 // Type
 

@@ -1,8 +1,12 @@
-import isNumber from './helpers/is-number'
+import memoize from './helpers/memoize.ts';
 
-console.log('Hello, World!');
+let calls = 0;
+function double (x: number): number {
+    calls += 1;
+    return x * 2;
+}
 
-const input: string = '9134437236318171116117288148911191769789149391998581842118486728495315197918969961726641911197278519'
-const test: number = Number(input);
+const memoTest = memoize(double);
+const result1 = memoTest(2);
 
-console.log({test, isNumber: isNumber(test)});
+console.log(JSON.stringify({ result1, calls }, null, 2));

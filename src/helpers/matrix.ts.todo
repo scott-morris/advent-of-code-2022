@@ -1,13 +1,59 @@
-/* eslint-disable no-bitwise */
+// deno-lint-ignore-file no-this-alias
 // Dependencies
 
-const math = require('./math');
+import * as math from './math.ts';
+
+// Types
+
+export enum flags {
+  RIGHT = 0b00000001,
+  BOTTOM_RIGHT = 0b00000010,
+  BOTTOM = 0b00000100,
+  BOTTOM_LEFT = 0b00001000,
+  LEFT = 0b00010000,
+  TOP_LEFT = 0b00100000,
+  TOP = 0b01000000,
+  TOP_RIGHT = 0b10000000,
+}
+
+
+export declare namespace Matrix {
+  interface Coordinates {
+    x: number,
+    y: number
+  }
+  interface CoordinateLike {
+    x: string | number,
+    y: string | number
+  }
+  interface Value {
+    x: number,
+    y: number,
+    value: unknown
+  }
+}
+
+/**
+ * @callback Matrix~Loop
+ * @param {*} value the value at the coordinates
+ * @param {Matrix~CoordsObject} coords the coordinates object
+ * @param {Matrix} matrix the matrix
+ */
+export interface Loop {
+  value: unknown,
+  coords: Matrix.Coordinates,
+  matrix: Matrix
+}
+
+type MatrixRow = Array<unknown>;
+type Axis = 'x' | 'y';
 
 // Private
 
-function validateCoords({ x, y }) {
-  const parsedX = parseInt(x, 10);
-  const parsedY = parseInt(y, 10);
+function validateCoords(coords: Matrix.CoordinateLike): Matrix.Coordinates | null {
+  const { x, y } = coords;
+  const parsedX = typeof x === "string" ? parseInt(x, 10) : x;
+  const parsedY = typeof y === "string" ? parseInt(y, 10) : y;
 
   if (
     parsedX !== Number(x) ||
@@ -15,7 +61,7 @@ function validateCoords({ x, y }) {
     parsedX < 0 ||
     parsedY < 0
   ) {
-    return {};
+    return null;
   }
 
   return {
@@ -26,18 +72,7 @@ function validateCoords({ x, y }) {
 
 // Public
 
-const flags = {
-  RIGHT: 0b00000001,
-  BOTTOM_RIGHT: 0b00000010,
-  BOTTOM: 0b00000100,
-  BOTTOM_LEFT: 0b00001000,
-  LEFT: 0b00010000,
-  TOP_LEFT: 0b00100000,
-  TOP: 0b01000000,
-  TOP_RIGHT: 0b10000000,
-};
-
-function translateCoords(coords) {
+export function translateCoords(coords: [number, number] | Matrix.Coordinates | string): Matrix.Coordinates {
   let result;
   if (Array.isArray(coords)) {
     const [x, y] = coords;
@@ -50,22 +85,24 @@ function translateCoords(coords) {
     result = { x, y };
   }
 
-  return validateCoords(result);
+  const validated = validateCoords(result);
+  return (validated === null) ? { x: -1, y: -1 } : validated;
 }
 
-/**
- * @class
- */
-class Matrix {
-  constructor(data = [], { processItem = (item) => parseInt(item, 10) } = {}) {
+export class Matrix {
+  data: Array<MatrixRow>;
+  defaultValue: unknown;
+
+  constructor(data: Array<string> | Array<MatrixRow> = [], { processItem = (item: string) => parseInt(item, 10) } = {}, defaultValue: unknown | null = -1) {
     // Convert incoming data to a 2 dimensional array
-    this.data = [...data].map((row) => [...(row || [])].map(processItem));
+    this.data = [...data].map((row: string) => [...row].map(processItem));
+    this.defaultValue = defaultValue;
   }
 
   /**
    * @param {Matrix~Loop} fn
    */
-  forEach(fn) {
+  forEach(fn: (value: unknown, coords: Matrix.Coordinates, self: Matrix) => undefined) {
     const self = this;
     const rows = this.data;
     rows.forEach((row, y) => {
@@ -75,21 +112,21 @@ class Matrix {
     });
   }
 
-  map(fn) {
+  map(fn: (value: unknown, coords: Matrix.Coordinates, self: Matrix) => Array<MatrixRow>) {
     const { width } = this;
 
     for (let y = 0; y < this.data.length; y += 1) {
       for (let x = 0; x < width; x += 1) {
-        const currentValue = this.get({ x, y }, { defaultValue: null });
+        const currentValue = this.get({ x, y });
         const newValue = fn(currentValue, { x, y }, this);
-        this.set({ x, y }, newValue, { mustExist: false });
+        this.set({ x, y }, newValue, false);
       }
     }
 
     return this.data;
   }
 
-  reduce(fn, initialValue) {
+  reduce(fn: (previousValue: unknown, value: unknown, coords: Matrix.Coordinates, self: Matrix) => unknown, initialValue: unknown): unknown {
     const self = this;
     const flattened = this.data
       .map((rows, y) => rows.map((val, x) => ({ val, x, y })))
@@ -125,15 +162,15 @@ class Matrix {
     return this.data.length;
   }
 
-  get(coords, { defaultValue = -1, includeCoords = false } = {}) {
+  get(coords: Matrix.Coordinates): Matrix.Value  {
     const { x, y } = translateCoords(coords);
 
-    const value = this?.data?.[y]?.[x] ?? defaultValue;
+    const value = this?.data?.[y]?.[x] ?? this.defaultValue;
 
-    return includeCoords ? { x, y, value } : value;
+    return { x, y, value };
   }
 
-  set(coords, value, { mustExist = true } = {}) {
+  set(coords: Matrix.Coordinates, value: unknown, mustExist = true): Matrix {
     const { x, y } = translateCoords(coords);
 
     if (x < 0 || y < 0 || x === undefined || y === undefined) {
@@ -151,7 +188,7 @@ class Matrix {
   }
 
   getAdjacents(
-    coords,
+    coords: Matrix.Coordinates,
     { includeDiagonals = false, includeDirections = 0 } = {}
   ) {
     const self = this;
@@ -176,33 +213,33 @@ class Matrix {
     }
 
     if (directions & flags.RIGHT) {
-      adjacents.push(this.get({ x: x + 1, y }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x + 1, y }));
     }
     if (directions & flags.BOTTOM) {
-      adjacents.push(this.get({ x, y: y + 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x, y: y + 1 }));
     }
     if (directions & flags.LEFT) {
-      adjacents.push(this.get({ x: x - 1, y }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x - 1, y }));
     }
     if (directions & flags.TOP) {
-      adjacents.push(this.get({ x, y: y - 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x, y: y - 1 }));
     }
     if (directions & flags.BOTTOM_RIGHT) {
-      adjacents.push(this.get({ x: x + 1, y: y + 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x + 1, y: y + 1 }));
     }
     if (directions & flags.BOTTOM_LEFT) {
-      adjacents.push(this.get({ x: x - 1, y: y + 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x - 1, y: y + 1 }));
     }
     if (directions & flags.TOP_LEFT) {
-      adjacents.push(this.get({ x: x - 1, y: y - 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x - 1, y: y - 1 }));
     }
     if (directions & flags.TOP_RIGHT) {
-      adjacents.push(this.get({ x: x + 1, y: y - 1 }, { includeCoords: true }));
+      adjacents.push(this.get({ x: x + 1, y: y - 1 }));
     }
 
     return adjacents
       .filter(({ x: fx, y: fy }) => (self?.data?.[fy]?.[fx] ?? 'DNE') !== 'DNE')
-      .map((c) => self.get(c, { includeCoords: true }));
+      .map((c) => self.get(c));
   }
 
   flip({ axis = 'y', height = this.height } = {}) {
@@ -224,22 +261,17 @@ class Matrix {
     return this;
   }
 
-  split({ axis, index, includeSplit = true } = {}) {
-    let result;
-    if (axis === 'x') {
-      result = this.data.map((row) =>
-        row.slice(includeSplit ? index : index + 1)
-      );
-      this.data = this.data.map((row) => row.slice(0, index));
-    } else if (axis === 'y') {
-      result = this.data.slice(includeSplit ? index : index + 1);
-      this.data = this.data.slice(0, index);
-    }
+  split(axis: Axis = 'x', index = 0, includeSplit = true): Matrix {
+    const result = (axis === 'x') ? this.data.map((row) =>
+      row.slice(includeSplit ? index : index + 1)
+    ) : this.data.slice(includeSplit ? index : index + 1);
 
+    this.data = (axis === 'x') ? this.data.map((row) => row.slice(0, index)) : this.data.slice(0, index);
+   
     return new Matrix(result, { processItem: (item) => item });
   }
 
-  merge(matrix, fn = (currentValue, incomingValue) => incomingValue) {
+  merge(matrix: Matrix, fn = (_currentValue: unknown, incomingValue: unknown) => incomingValue) {
     const self = this;
     matrix.forEach((incomingValue, coords) => {
       const currentValue = self.get(coords, { defaultValue: null });
@@ -265,18 +297,3 @@ class Matrix {
     return this.data.map((row) => row.join(joinX)).join(joinY);
   }
 }
-
-module.exports = { matrixFlags: flags, translateCoords, Matrix };
-
-/**
- * @typedef Matrix~CoordsObject
- * @property {number} x the x coordinate
- * @property {number} y the y coordinate
- */
-
-/**
- * @callback Matrix~Loop
- * @param {*} value the value at the coordinates
- * @param {Matrix~CoordsObject} coords the coordinates object
- * @param {Matrix} matrix the matrix
- */

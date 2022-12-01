@@ -1,7 +1,7 @@
 // Libraries
 
-import { assertInstanceOf, assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.156.0/testing/bdd.ts";
+import { assertInstanceOf, assertEquals } from "https://deno.land/std@0.164.0/testing/asserts.ts";
+import { describe, it } from "https://deno.land/std@0.164.0/testing/bdd.ts";
 
 // Dependencies
 

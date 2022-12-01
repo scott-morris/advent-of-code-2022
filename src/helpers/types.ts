@@ -1,14 +1,18 @@
 export type Key = string | number;
 
 export interface MapCallbackFunction {
-    (value: any, key: Key, arr: Array<any>): void
+    (value: unknown, key: Key, arr: Array<unknown>): void
 }
 
 export interface Result {
-    result: any;
+    result: unknown;
     duration: number;
 }
   
 export type PotentialResult = Result | undefined;
 
 export type Stringable = string | string[] | number | number[] | null
+
+export type SimpleObject = {
+    [property: string | number]: string | number;
+}

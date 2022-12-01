@@ -10,7 +10,7 @@ import "./types.d.ts";
 
 // Public
 
-export default function part2(input: Day1Input): Answer {
+export default function part2(input: Day01Input): Answer {
   const calories = input.map(getCalories);
 
   // Put the calories in order.

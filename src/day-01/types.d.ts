@@ -1,1 +1,1 @@
-type Day1Input = Input.NumberArray[];
+type Day01Input = Input.NumberArray[];

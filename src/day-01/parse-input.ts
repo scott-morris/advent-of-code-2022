@@ -6,9 +6,9 @@ import "./types.d.ts";
 
 // Public
 
-export default function parseInput(input: RawInput): Day1Input {
+export default function parseInput(input: RawInput): Day01Input {
   const arr = parseNumberArray(input, "\n");
-  const output: Day1Input = [];
+  const output: Day01Input = [];
 
   for (
     let i = arr.findIndex((e) => isNaN(e));

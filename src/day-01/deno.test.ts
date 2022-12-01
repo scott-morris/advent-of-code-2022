@@ -31,7 +31,7 @@ describe("Day 1", () => {
 
 10000`;
 
-  const input: Day1Input = [
+  const input: Day01Input = [
     [1000, 2000, 3000],
     [4000],
     [5000, 6000],

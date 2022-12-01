@@ -16,7 +16,7 @@ RESET='\033[00;0m'
 
 # Functions
 
-display_usage (){
+display_usage() {
     echo -e "\n${BOLD}Usage:${RESET} $0 [dayNumber] \n"
 }
 
@@ -40,9 +40,9 @@ fi
 # Get the environment variable
 . ./session.env
 
-download () {
+download() {
     FILE=$2
-    URL=https://adventofcode.com/2021/day/$1/input
+    URL=https://adventofcode.com/2022/day/$1/input
     echo -e "${BLUE}Downloading ${BOLD_BLUE_UNDERLINE}${URL}${BLUE} to ${BOLD_BLUE_UNDERLINE}${FILE}${RESET}"
     curl $URL --cookie "session=$SESSION" --output $FILE &>/dev/null
 
@@ -50,10 +50,10 @@ download () {
     if [ "$LENGTH" -ne 0 ] && [ -z "$(tail -c -1 <$FILE)" ]; then
         # The file ends with a newline or null
         echo -e "${BLUE}${BOLD_BLUE_UNDERLINE}${FILE}${BLUE} ends with a newline or null. Removing it...${RESET}"
-        dd if=/dev/null of=$FILE obs="$((LENGTH-1))" seek=1 &>/dev/null
+        dd if=/dev/null of=$FILE obs="$((LENGTH - 1))" seek=1 &>/dev/null
     fi
 
-    echo "";
+    echo ""
     echo -e "${GREEN}Your data for Day ${DAY} is available at ${BOLD_BLUE_UNDERLINE}${FILE}${RESET}"
 }
 
@@ -62,14 +62,20 @@ DAY=$(printf %02d $1)
 FILE=./data/input-${DAY}.data
 
 if [ -f $FILE ]; then
-# Run the `run.js` in the given folder if it can be found
+    # Run the `run.js` in the given folder if it can be found
     echo ""
     while true; do
         read -p "The file \"${FILE}\" already exists. Overwrite? (y/n) " OVERWRITE
         case $OVERWRITE in
-            [Yy]* ) download $1 $FILE; break;;
-            [Nn]* ) exit 0; break;;
-            * ) echo "Please answer yes or no.";;
+        [Yy]*)
+            download $1 $FILE
+            break
+            ;;
+        [Nn]*)
+            exit 0
+            break
+            ;;
+        *) echo "Please answer yes or no." ;;
         esac
     done
 else

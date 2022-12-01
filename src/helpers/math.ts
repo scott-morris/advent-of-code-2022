@@ -1,10 +1,6 @@
 // Dependencies
 
-import memoize from './memoize.ts';
-
-// Types
-
-import { SimpleObject, Stringable } from './types.ts';
+import memoize from "./memoize.ts";
 
 // Private
 
@@ -23,7 +19,9 @@ export function sum(arr: Array<number>): number {
 /**
  * Get the unique items in an array and how many times they appear
  */
-export function countValues(val: Array<Stringable> | SimpleObject): Map<Stringable, number> {
+export function countValues(
+  val: Array<Stringable> | SimpleObject
+): Map<Stringable, number> {
   return Array.isArray(val)
     ? val.reduce((res, item) => {
         res.set(item, (res?.get(item) ?? 0) + 1);
@@ -70,9 +68,9 @@ export function median(arr: Array<number>): number {
  */
 export function mode(arr: Array<number>): Array<number> {
   interface CountObject {
-    [index: number]: number
+    [index: number]: number;
   }
-  
+
   const modes: Array<number> = [];
   const count: CountObject = {};
   let maxIndex = 0;
@@ -96,9 +94,7 @@ export function mode(arr: Array<number>): Array<number> {
  * Round a given number to a specific number of places
  */
 export function round(number: number, places = 0): string {
-  return places === 0
-    ? String(Math.round(number))
-    : number.toFixed(places);
+  return places === 0 ? String(Math.round(number)) : number.toFixed(places);
 }
 
 /**
@@ -109,7 +105,10 @@ export const stdDev = (arr: Array<number>, usePopulation = false): number => {
 
   return Math.sqrt(
     arr
-      .reduce((acc: Array<number>, val) => acc.concat((val - meanValue) ** 2), [])
+      .reduce(
+        (acc: Array<number>, val) => acc.concat((val - meanValue) ** 2),
+        []
+      )
       .reduce((acc, val) => acc + val, 0) /
       (arr.length - (usePopulation ? 0 : 1))
   );

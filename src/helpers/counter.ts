@@ -1,7 +1,5 @@
 // Dependencies
 
-import { Key } from "./types.ts";
-
 // Private
 
 export interface CounterForEachCallback {
@@ -9,7 +7,7 @@ export interface CounterForEachCallback {
 }
 
 export interface CounterObject {
-  [key: Key]: number
+  [key: Key]: number;
 }
 
 // Public
@@ -62,7 +60,8 @@ export class Counter {
 
   increment(key: Key, byHowMuch = 1): number {
     const currentValue = this.map.get(key);
-    const newValue = currentValue === undefined ? byHowMuch : currentValue + byHowMuch;
+    const newValue =
+      currentValue === undefined ? byHowMuch : currentValue + byHowMuch;
 
     this.map.set(key, newValue);
 
@@ -71,7 +70,8 @@ export class Counter {
 
   decrement(key: Key, byHowMuch = 1): number {
     const currentValue = this.map.get(key);
-    const newValue = currentValue === undefined ? 0 - byHowMuch : currentValue - byHowMuch;
+    const newValue =
+      currentValue === undefined ? 0 - byHowMuch : currentValue - byHowMuch;
 
     this.map.set(key, newValue);
 
@@ -80,8 +80,8 @@ export class Counter {
 
   toObject(): CounterObject {
     return Array.from(this.map).reduce(
-        (obj, [key, value]) => ({ ...obj, [key]: value }),
-        {}
-      )
+      (obj, [key, value]) => ({ ...obj, [key]: value }),
+      {}
+    );
   }
 }

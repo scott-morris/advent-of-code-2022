@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "/": "./",
+    "./": "./",
+    "jsdom": "https://esm.sh/jsdom"
+  }
+}

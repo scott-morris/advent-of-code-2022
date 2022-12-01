@@ -1,11 +1,12 @@
 // Libraries
 
-import chalk from 'chalk';
-import { path } from 'path';
+import chalk from "npm:chalk";
+import * as path from "https://deno.land/std@0.166.0/path/mod.ts";
+import { fileExists } from "./fs.ts";
 
-// Dependencies
+// Private
 
-const fs = require('./fs-extravaganza');
+const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 
 // Public
 
@@ -14,24 +15,22 @@ const fs = require('./fs-extravaganza');
  * @param {Number} dayNumber the number of the day to get the input file for
  * @returns {String} the path to the input file
  */
-function getInputFile(dayNumber) {
-  const paddedNumber = dayNumber.toString().padStart(2, '0').slice(-2);
+export async function getInputFile(dayNumber: number) {
+  const paddedNumber = dayNumber.toString().padStart(2, "0").slice(-2);
   const fileName = path.resolve(
     __dirname,
     `../../data/input-${paddedNumber}.data`
   );
 
   // Check for existence of file. If it does not exist, provide a user-friendly error message.
-  if (!fs.existsSync(fileName)) {
+  if (!(await fileExists(fileName))) {
     console.log(
-      `${chalk.bold.red('ERROR:')} The input file ${chalk.blue.underline(
+      `${chalk.bold.red("ERROR:")} The input file ${chalk.blue.underline(
         fileName
       )} does not exist. Please create it before continuing.`
     );
-    process.exit(1);
+    Deno.exit(1);
   }
 
   return fileName;
 }
-
-module.exports = getInputFile;

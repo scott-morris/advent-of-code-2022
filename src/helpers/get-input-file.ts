@@ -2,7 +2,8 @@
 
 import chalk from "https://deno.land/x/chalk_deno@v4.1.1-deno/source/index.js";
 import * as path from "https://deno.land/std@0.166.0/path/mod.ts";
-import { fileExists } from "./fs.ts";
+import { fileExists, readFile } from "./fs.ts";
+import "../types/global.d.ts";
 
 // Private
 
@@ -15,7 +16,9 @@ const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
  * @param {Number} dayNumber the number of the day to get the input file for
  * @returns {String} the path to the input file
  */
-export async function getInputFile(dayNumber: number) {
+export default async function getInputFile(
+  dayNumber: number
+): Promise<RawInput> {
   const paddedNumber = dayNumber.toString().padStart(2, "0").slice(-2);
   const fileName = path.resolve(
     __dirname,
@@ -32,5 +35,5 @@ export async function getInputFile(dayNumber: number) {
     Deno.exit(1);
   }
 
-  return fileName;
+  return await readFile(fileName);
 }

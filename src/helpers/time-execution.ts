@@ -7,7 +7,9 @@ import "../types/global.d.ts";
  * @param {Function} fn the function to time
  * @returns {Object} an object as `{ result, duration }`
  */
-export function timeExecution(fn: Function): (args: any[]) => TimedAnswer {
+export default function timeExecution(
+  fn: Function
+): (args: any) => TimedAnswer {
   return (...args) => {
     const start = performance.now();
     const result = fn(...args);

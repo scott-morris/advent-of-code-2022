@@ -1,25 +1,17 @@
 // Libraries
 
-import { JSDOM } from "jsdom";
-
-// Private
-
-const { window } = new JSDOM();
-
-// Public
+import "../types/global.d.ts";
 
 /**
  * Get the amount of time it takes to execute a function at runtime
  * @param {Function} fn the function to time
  * @returns {Object} an object as `{ result, duration }`
  */
-export function timeExecution(
-  fn: (args: unknown[]) => Answer
-): (args: unknown[]) => TimedAnswer {
+export function timeExecution(fn: Function): (args: any[]) => TimedAnswer {
   return (...args) => {
-    const start = window.performance.now();
+    const start = performance.now();
     const result = fn(...args);
-    const stop = window.performance.now();
+    const stop = performance.now();
 
     return {
       result,

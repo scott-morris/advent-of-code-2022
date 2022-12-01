@@ -1,6 +1,6 @@
 // Libraries
 
-import chalk from "npm:chalk";
+import chalk from "https://deno.land/x/chalk_deno@v4.1.1-deno/source/index.js";
 import * as path from "https://deno.land/std@0.166.0/path/mod.ts";
 import { fileExists } from "./fs.ts";
 

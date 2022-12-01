@@ -2,6 +2,10 @@
 
 import { sum } from "../helpers/math.ts";
 import { getCalories } from "./part1.ts";
+
+// Types
+
+import "../types/global.d.ts";
 import "./types.d.ts";
 
 // Public

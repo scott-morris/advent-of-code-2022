@@ -1,6 +1,10 @@
 // Dependencies
 
 import { sum } from "../helpers/math.ts";
+
+// Types
+
+import "../types/global.d.ts";
 import "./types.d.ts";
 
 // Public

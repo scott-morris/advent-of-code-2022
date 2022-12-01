@@ -31,7 +31,7 @@ FILE=./src/day-${DAY}/index.ts
 # Run the `index.ts` in the given folder if it can be found
 if [ -f $FILE ]; then
     echo ""
-    deno run --allow-read --allow-env $FILE
+    deno run --allow-read --allow-env --allow-hrtime $FILE
     echo ""
 else
     echo -e "${BOLD_RED}ERROR: ${RED}File \"${FILE}\" does not exist${RESET}"

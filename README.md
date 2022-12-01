@@ -30,6 +30,12 @@ TBD
 deno ./src/index.js
 ```
 
+## Running the tests
+
+```sh
+deno test
+```
+
 ## Using the template
 
 ```sh

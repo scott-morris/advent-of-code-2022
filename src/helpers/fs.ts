@@ -1,3 +1,7 @@
+// Dependencies
+
+export * as path from "https://deno.land/std@0.166.0/path/mod.ts";
+
 // Public
 
 export async function pathExists(path: string | URL): Promise<boolean> {
@@ -24,6 +28,17 @@ export async function directoryExists(path: string | URL): Promise<boolean> {
       throw err;
     }
   }
+}
+
+export async function mkdirSafe(path: string | URL): Promise<void> {
+  // If directory already exists, do nothing.
+  if (await directoryExists(path)) {
+    return;
+  }
+
+  await Deno.mkdir(path, {
+    recursive: true,
+  });
 }
 
 export async function fileExists(path: string | URL): Promise<boolean> {

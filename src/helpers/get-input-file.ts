@@ -1,8 +1,7 @@
 // Libraries
 
 import chalk from "https://deno.land/x/chalk_deno@v4.1.1-deno/source/index.js";
-import * as path from "https://deno.land/std@0.166.0/path/mod.ts";
-import { fileExists, readFile } from "./fs.ts";
+import { fileExists, readFile, path } from "./fs.ts";
 import "../types/global.d.ts";
 
 // Private

@@ -4,13 +4,16 @@
 
 import { Command } from "https://deno.land/x/cmd@v1.2.0/commander/index.ts";
 import { renderFile, configure } from "https://deno.land/x/eta@v1.11.0/mod.ts";
-import * as path from "https://deno.land/std@0.166.0/path/mod.ts";
 
 // Dependencies
+
+import { path } from "./src/helpers/fs.ts";
 
 // Setup
 
 const TEMPLATE_DIRECTORY = path.resolve(Deno.cwd(), "./src/template");
+const DATA_DIRECTORY = path.resolve(Deno.cwd(), "./data");
+const COOKIE_FILE = path.resolve(Deno.cwd(), "./session.env");
 
 configure({
   views: TEMPLATE_DIRECTORY,
@@ -21,11 +24,15 @@ const program = new Command("create.ts");
 program.version("0.0.1");
 
 let dayValue;
+let downloadFlag;
 program
-  .arguments("<day>")
-  ?.option("-v, --verbose", "enable verbose mode")
-  ?.action(function (day) {
+  .arguments("[day]")
+  ?.option("-d, --download", "download user data")
+  ?.option("-n, --no-download", "do not download user data")
+  ?.action(function (day, cmdObj) {
     dayValue = day;
+
+    downloadFlag = cmdObj?.download ?? undefined;
   });
 
 program.parse(Deno.args);
@@ -33,11 +40,15 @@ program.parse(Deno.args);
 // Check parameters
 
 if (isNaN(Number(dayValue))) {
+  dayValue = prompt("Please enter a day between 1-25:");
+}
+
+if (isNaN(Number(dayValue)) || Number(dayValue) < 1 || Number(dayValue) > 25) {
   console.error(`Invalid day given: "${dayValue}"`);
   Deno.exit(1);
 }
 
-(async function applyTemplate(dayValue) {
+(async (dayValue) => {
   const encoder = new TextEncoder();
 
   const data = {
@@ -57,5 +68,14 @@ if (isNaN(Number(dayValue))) {
 
     const templateResult = await renderFile(inputFile, data);
     await Deno.writeFile(outputFile, encoder.encode(templateResult));
+  }
+
+  const getInputData =
+    downloadFlag === undefined
+      ? confirm("Do you want to download your input data?")
+      : downloadFlag;
+
+  if (getInputData) {
+    // get input data
   }
 })(dayValue);

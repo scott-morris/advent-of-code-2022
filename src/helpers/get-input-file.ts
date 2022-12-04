@@ -1,6 +1,11 @@
 // Libraries
 
-import chalk from "https://deno.land/x/chalk_deno@v4.1.1-deno/source/index.js";
+import {
+  blue,
+  red,
+  bold,
+  underline,
+} from "https://deno.land/std@0.123.0/fmt/colors.ts";
 import { fileExists, readFile, path } from "./fs.ts";
 import "../types/global.d.ts";
 
@@ -27,8 +32,8 @@ export default async function getInputFile(
   // Check for existence of file. If it does not exist, provide a user-friendly error message.
   if (!(await fileExists(fileName))) {
     console.log(
-      `${chalk.bold.red("ERROR:")} The input file ${chalk.blue.underline(
-        fileName
+      `${bold(red("ERROR:"))} The input file ${blue(
+        underline(fileName)
       )} does not exist. Please create it before continuing.`
     );
     Deno.exit(1);

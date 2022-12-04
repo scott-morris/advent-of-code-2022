@@ -15,7 +15,7 @@ import "./types.d.ts";
 // Public
 
 async function main() {
-  const raw = await getInputFile(<%= it.day %>);
+  const raw = await getInputFile(3);
 
   const input = parseInput(raw);
 

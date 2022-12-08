@@ -25,17 +25,21 @@ describe("Day <%= it.day %>", () => {
     });
   });
 
-  describe.ignore("Part 1", () => {
-    it("when given the sample input, the answer should be 0", () => {
-      const result = part1(input);
-      assertEquals(result, 0);
+  describe("Part 1", () => {
+    describe.ignore("part1()", () => {
+      it("when given the sample input, the answer should be 0", () => {
+        const result = part1(input);
+        assertEquals(result, 0);
+      });
     });
   });
 
-  describe.ignore("Part 2", () => {
-    it("when given the sample input, the answer should be 0", () => {
-      const result = part2(input);
-      assertEquals(result, 0);
+  describe("Part 2", () => {
+    describe.ignore("part2()", () => {
+      it("when given the sample input, the answer should be 0", () => {
+        const result = part2(input);
+        assertEquals(result, 0);
+      });
     });
   });
 });

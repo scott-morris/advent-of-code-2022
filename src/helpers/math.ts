@@ -1,6 +1,7 @@
 // Dependencies
 
 import memoize from "./memoize.ts";
+import "../types/global.d.ts";
 
 // Private
 

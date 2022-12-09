@@ -2,7 +2,7 @@
 
 import { assertEquals } from "https://deno.land/std@0.164.0/testing/asserts.ts";
 import { describe, it } from "https://deno.land/std@0.164.0/testing/bdd.ts";
-import "./types.d.ts";
+import { Day<%= it.dayString %>Input } from "./types.d.ts";
 import "../types/global.d.ts";
 
 // Dependencies

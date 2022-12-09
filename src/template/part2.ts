@@ -3,7 +3,7 @@
 // Types
 
 import "../types/global.d.ts";
-import "./types.d.ts";
+import { Day<%= it.dayString %>Input } from "./types.d.ts";
 
 // Public
 

@@ -1,1 +1,3 @@
-type Day08Input = number[];
+import Matrix from '../helpers/matrix.ts';
+
+type Day08Input = Matrix;

@@ -18,14 +18,16 @@ describe("Day <%= it.day %>", () => {
 
   const input: Day<%= it.dayString %>Input = [];
 
-  describe("parseInput", () => {
-    it("when given the sample input, it should return an array of arrays containing numbers", () => {
-      const parsedInput = parseInput(rawInput);
-      assertEquals(parsedInput, input);
+  describe("parse-input.ts", () => {
+    describe.ignore("parseInput()", () => {
+      it("when given the sample input, it should return what we want to work with", () => {
+        const parsedInput = parseInput(rawInput);
+        assertEquals(parsedInput, input);
+      });
     });
   });
 
-  describe("Part 1", () => {
+  describe("part1.ts", () => {
     describe.ignore("part1()", () => {
       it("when given the sample input, the answer should be 0", () => {
         const result = part1(input);
@@ -34,7 +36,7 @@ describe("Day <%= it.day %>", () => {
     });
   });
 
-  describe("Part 2", () => {
+  describe("part2.ts", () => {
     describe.ignore("part2()", () => {
       it("when given the sample input, the answer should be 0", () => {
         const result = part2(input);

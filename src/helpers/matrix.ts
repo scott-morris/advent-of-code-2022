@@ -1,13 +1,45 @@
 // deno-lint-ignore-file no-explicit-any no-this-alias
 // Dependencies
 
-import { transpose } from "./math.ts";
-
 // Types
 
 export interface Coordinates {
   x: number;
   y: number;
+}
+
+export enum Direction {
+  RIGHT = 0b00000001,
+  EAST = 0b00000001,
+  BOTTOM_RIGHT = 0b00000010,
+  SOUTHEAST = 0b00000010,
+  BOTTOM = 0b00000100,
+  SOUTH = 0b00000100,
+  BOTTOM_LEFT = 0b00001000,
+  SOUTHWEST = 0b00001000,
+  LEFT = 0b00010000,
+  WEST = 0b00010000,
+  TOP_LEFT = 0b00100000,
+  NORTHWEST = 0b00100000,
+  TOP = 0b01000000,
+  NORTH = 0b01000000,
+  TOP_RIGHT = 0b10000000,
+  NORTHEAST = 0b10000000,
+}
+
+/**
+ * Use for `[UP|DOWN|LEFT|RIGHT]` or `[NORTH|SOUTH|EAST|WEST]`, noting that
+ * `UP === NORTH`, `DOWN === SOUTH, etc.
+ */
+export enum CardinalDirection {
+  UP = 0b00000001,
+  NORTH = 0b00000001,
+  DOWN = 0b00000010,
+  SOUTH = 0b00000010,
+  LEFT = 0b00000100,
+  WEST = 0b00000100,
+  RIGHT = 0b00001000,
+  EAST = 0b00001000,
 }
 
 // Public

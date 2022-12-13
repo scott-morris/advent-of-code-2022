@@ -9,7 +9,7 @@ import "../types/global.d.ts";
 
 import parseInput, { parseLine } from "./parse-input.ts";
 import part1, { VideoSystem } from "./part1.ts";
-import part2 from "./part2.ts";
+import part2, { runPart2, VideoScreen } from "./part2.ts";
 
 // Tests
 
@@ -231,35 +231,44 @@ noop`;
         const videoSystem = new VideoSystem(input2);
 
         it("after the 20th cycle", () => {
-          videoSystem.waitCycles(20);
+          videoSystem.waitCycles(19);
           assertEquals(videoSystem.x, 21);
           assertEquals(videoSystem.signalStrength, 420);
         });
 
         it("after the 60th cycle", () => {
           videoSystem.waitCycles(40);
+          assertEquals(videoSystem.x, 19);
           assertEquals(videoSystem.signalStrength, 1140);
         });
 
         it("after the 100th cycle", () => {
           videoSystem.waitCycles(40);
+          assertEquals(videoSystem.x, 18);
           assertEquals(videoSystem.signalStrength, 1800);
         });
 
         it("after the 140th cycle", () => {
           videoSystem.waitCycles(40);
+          assertEquals(videoSystem.x, 21);
           assertEquals(videoSystem.signalStrength, 2940);
         });
 
         it("after the 180th cycle", () => {
           videoSystem.waitCycles(40);
+          assertEquals(videoSystem.x, 16);
           assertEquals(videoSystem.signalStrength, 2880);
         });
 
         it("after the 220th cycle", () => {
           videoSystem.waitCycles(40);
+          assertEquals(videoSystem.x, 18);
           assertEquals(videoSystem.signalStrength, 3960);
         });
+
+        // it("check the logs", () => {
+        //   assertEquals(videoSystem.logs, []);
+        // });
       });
     });
 
@@ -272,6 +281,42 @@ noop`;
   });
 
   describe("part2.ts", () => {
+    describe("VideoScreen class", () => {
+      const videoScreen = new VideoScreen(input2);
+
+      it("cycle 1", () => {
+        videoScreen.cycle();
+        assertEquals(videoScreen.currentLine, "#");
+      });
+
+      it("cycle 2", () => {
+        videoScreen.cycle();
+        assertEquals(videoScreen.currentLine, "##");
+      });
+
+      it("cycle 3", () => {
+        videoScreen.cycle();
+        assertEquals(videoScreen.currentLine, "## ");
+      });
+
+      it("cycle 4", () => {
+        videoScreen.cycle();
+        assertEquals(videoScreen.currentLine, "##  ");
+      });
+    });
+
+    it("runPart2()", () => {
+      const videoScreen = runPart2(input2);
+      assertEquals(videoScreen.screen, [
+        "##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ",
+        "###   ###   ###   ###   ###   ###   ### ",
+        "####    ####    ####    ####    ####    ",
+        "#####     #####     #####     #####     ",
+        "######      ######      ######      ####",
+        "#######       #######       #######     ",
+      ]);
+    });
+
     describe.ignore("part2()", () => {
       it("when given the sample input, the answer should be 0", () => {
         const result = part2(input);

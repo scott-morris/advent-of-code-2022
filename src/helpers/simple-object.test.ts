@@ -19,6 +19,7 @@ describe("simple-object.ts", () => {
         qux: "qux",
         foo: { bar: "foo.bar" },
         baz: ["lorem", 42, "ipsum"],
+        reallyBig: 9007199254740993n,
       };
 
       const objectCopy = copy(originalObject);

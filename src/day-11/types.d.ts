@@ -1,7 +1,7 @@
 export interface OperationDef {
-  operand1: string | number;
+  operand1: string | bigint;
   action: string;
-  operand2: string | number;
+  operand2: string | bigint;
 }
 
 export interface ThrowDef {
@@ -11,9 +11,9 @@ export interface ThrowDef {
 
 export interface MonkeyDef {
   index: number;
-  items: number[];
+  items: bigint[];
   operation: OperationDef;
-  testDivide: number;
+  testDivide: bigint;
   throwTo: ThrowDef;
 }
 

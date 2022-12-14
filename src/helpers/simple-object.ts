@@ -8,9 +8,16 @@ export type SimpleKey = string | number | symbol;
 
 // Public
 
-export function copy(obj: unknown): unknown {
-  return JSON.parse(JSON.stringify(obj));
-}
+(BigInt.prototype as any).toJSON = function () {
+  return `${this.toString()}n`;
+};
+
+export const copy = <T>(obj: T): T =>
+  JSON.parse(JSON.stringify(obj), (_key, value) => {
+    return typeof value === "string" && value.match(/^\d+n$/)
+      ? BigInt(value.replace("n", ""))
+      : value;
+  });
 
 export function get(obj: any, key: SimpleKey[], defaultValue: any) {
   return key.reduce((pointer, step) => {

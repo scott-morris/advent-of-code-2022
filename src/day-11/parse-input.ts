@@ -12,14 +12,14 @@ function getMonkeyIndex(desc: string): number {
   return Number(result?.[1] ?? -1);
 }
 
-function getMonkeyItems(desc: string): number[] {
+function getMonkeyItems(desc: string): bigint[] {
   const result = desc.match(/Starting items: ([^\n]+)/);
 
   if (result === null) {
     return [];
   }
 
-  return result[1].split(", ").map(Number);
+  return result[1].split(", ").map(BigInt);
 }
 
 function getMonkeyOperation(desc: string): OperationDef {
@@ -28,11 +28,11 @@ function getMonkeyOperation(desc: string): OperationDef {
   );
 
   if (result === null) {
-    throw new Error(`invalid operation in ${result}`);
+    throw new Error(`invalid operation in "${desc}"`);
   }
 
-  const operand1 = result[1] === "old" ? "old" : Number(result[1]);
-  const operand2 = result[3] === "old" ? "old" : Number(result[3]);
+  const operand1 = result[1] === "old" ? "old" : BigInt(result[1]);
+  const operand2 = result[3] === "old" ? "old" : BigInt(result[3]);
 
   return {
     operand1,
@@ -41,14 +41,14 @@ function getMonkeyOperation(desc: string): OperationDef {
   };
 }
 
-function getMonkeyDivisor(desc: string): number {
+function getMonkeyDivisor(desc: string): bigint {
   const result = desc.match(/Test: divisible by (\d+)/);
 
   if (result === null) {
-    throw new Error(`couldn't find divisor in ${desc}`);
+    throw new Error(`couldn't find divisor in "${desc}"`);
   }
 
-  return Number(result[1]);
+  return BigInt(result[1]);
 }
 
 function getMonkeyThrow(desc: string): ThrowDef {
@@ -56,7 +56,7 @@ function getMonkeyThrow(desc: string): ThrowDef {
   const resultFalse = desc.match(/If false: throw to monkey (\d+)/);
 
   if (resultTrue === null || resultFalse === null) {
-    throw new Error(`Bad throw description in ${desc}`);
+    throw new Error(`Bad throw description in "${desc}"`);
   }
 
   return {
@@ -91,7 +91,7 @@ export function parseMonkey(monkeyDescription: string[]): MonkeyDef {
 }
 
 export default function parseInput(input: RawInput): Day11Input {
-  const lines = parseStringArray(input);
+  const lines = parseStringArray(input, "\n");
   const result = [];
 
   for (; lines.length >= 6; ) {

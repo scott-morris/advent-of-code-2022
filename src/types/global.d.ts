@@ -20,7 +20,7 @@ declare global {
   /**
    * An answer must fit into a text field so it must be a string or number.
    */
-  type Answer = string | number | undefined;
+  type Answer = string | number | bigint | undefined;
 
   interface TimedAnswer {
     result: Answer;

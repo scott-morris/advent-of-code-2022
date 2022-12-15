@@ -9,4 +9,4 @@ Then, in part 2, my tests did me dirty. Okay, so they didn't actually do me dirt
 * Immutability is key. For lots of these array or object functions, you need to be super careful not to mutate your original object. In the real world case, it wouldn't have really mattered, but within the unit tests, you would start to see some REALLY weird stuff.
 
 ### To Do Going Forward:
-* 
+* Rethink what to do when Part1 and Part2 handle processing input differently.
